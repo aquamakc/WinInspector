@@ -22,9 +22,22 @@ namespace WinInspector.Tasks
             ARE = new AutoResetEvent(false);
         }
 
+        public TaskBase(Device device, SerialPort port, Params needParam)
+        {
+            this.Device = device;
+            this.Port = port;
+            this.Parameter = needParam;
+            port.DataReceived += Port_DataReceived;
+            Timer = new System.Timers.Timer();
+            Timer.Elapsed += Timer_Elapsed;
+            ARE = new AutoResetEvent(false);
+        }
+
         public List<byte> InData { get; set; } = null;
 
         public Device Device { get; private set; } = null;
+
+        public Params Parameter { get; set; }
 
         public SerialPort Port { get; private set; } = null;
 
@@ -32,7 +45,7 @@ namespace WinInspector.Tasks
 
         private AutoResetEvent ARE { get; set; } = null;      
 
-        private System.Timers.Timer Timer { get; set; } = null;
+        private System.Timers.Timer Timer { get; set; } = null;    
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -63,7 +76,7 @@ namespace WinInspector.Tasks
         {
             InData = new List<byte>();
             Port.Write(data, 0, data.Length);
-            Timer.Interval = 1500;
+            Timer.Interval = 1000;
             Timer.Start();
             ARE.WaitOne();
         }

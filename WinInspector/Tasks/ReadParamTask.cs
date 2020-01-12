@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
-using System.Threading;
 using static InCore.InProtocol;
 using InCore;
 
 namespace WinInspector.Tasks
 {
-    public class ReadVoltageTask : TaskBase
+    public class ReadParamTask : TaskBase
     {
-        public ReadVoltageTask(Device device, SerialPort port) : base(device, port) { }
+        public ReadParamTask(Device device, SerialPort port, Params needParam) : base(device, port, needParam) { }
 
         public override Answer DoingMethod()
         {
-            byte[] OutCom = GetHandler().GetVoltageCommand();
+            byte[] OutCom = GetHandler().GetReadParamCommand(Parameter);
             SendData(OutCom);
-            return GetHandler().CheckVoltageAnswer(InData.ToArray(), Device);
+            return GetHandler().CheckParamCommand(InData.ToArray(), Device, Parameter);
         }
     }
 }

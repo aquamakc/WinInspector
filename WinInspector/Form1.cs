@@ -36,7 +36,25 @@ namespace WinInspector
             b.Dispose();
             if (res == InProtocol.Answer.NOERR)
             {
-                b = new ReadVoltageTask(device, sp);
+                b = new ReadParamTask(device, sp, InProtocol.Params.VOLTA);
+                res = b.Execute();
+                b.Dispose();
+            }
+            if (res == InProtocol.Answer.NOERR)
+            {
+                b = new ReadParamTask(device, sp, InProtocol.Params.CURRE);
+                res = b.Execute();
+                b.Dispose();
+            }
+            if (res == InProtocol.Answer.NOERR)
+            {
+                b = new ReadParamTask(device, sp, InProtocol.Params.POWEP);
+                res = b.Execute();
+                b.Dispose();
+            }
+            if (res == InProtocol.Answer.NOERR)
+            {
+                b = new ReadParamTask(device, sp, InProtocol.Params.FREQU);
                 res = b.Execute();
                 b.Dispose();
             }

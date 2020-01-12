@@ -15,6 +15,8 @@ namespace InCore
 
         public enum Answer : byte { NOERR = 0, BADBCC = 1, ERRINDATA = 2, ERRLEN = 3, ERROUTDATA = 4 }
 
+        public enum Params : byte { VOLTA, CURRE, POWEP, FREQU }
+
         #endregion
 
         public static InProtocol GetHandler()
@@ -64,13 +66,13 @@ namespace InCore
             return outCommand.ToArray();
         }
 
-        public byte[] GetVoltageCommand()
+        public byte[] GetReadParamCommand(Params needParam)
         {
             List<byte> outCommand = new List<byte>();
             outCommand.Add((byte)ComBytes.SOH);
             outCommand.AddRange(Encoding.Default.GetBytes("R1")); // R - команда чтения, 1 - данные в формате ASCII
             outCommand.Add((byte)ComBytes.STX);
-            outCommand.AddRange(Encoding.Default.GetBytes("VOLTA()"));
+            outCommand.AddRange(Encoding.Default.GetBytes($"{needParam.ToString()}()"));
             outCommand.Add((byte)ComBytes.ETX);
             outCommand.Add(BccCalc(outCommand.ToArray()));
             return outCommand.ToArray();
@@ -115,28 +117,40 @@ namespace InCore
             return Answer.NOERR;
         }
 
-        /// <summary>
-        /// Проверка ответа на запрос напряжения
-        /// </summary>
-        public Answer CheckVoltageAnswer(byte[] Data, Device dev)
+        public Answer CheckParamCommand (byte[] Data, Device device, Params needParam)
         {
             if (!CheckBcc(Data))
                 return Answer.BADBCC;
             String inDataStr = Encoding.Default.GetString(Data);
-            if (!inDataStr.Contains("VOLTA") || !inDataStr.Contains("(") || !inDataStr.Contains(")"))
+            if (!inDataStr.Contains(needParam.ToString()) || !inDataStr.Contains("(") || !inDataStr.Contains(")"))
                 return Answer.ERRINDATA;
             int s = inDataStr.IndexOf("(") + 1;
             StringBuilder sb = new StringBuilder();
-            while(inDataStr[s] != ')')
+            while (inDataStr[s] != ')')
             {
                 sb.Append(inDataStr[s]);
                 s++;
             }
-           // sb.Replace(".", ",");
             if (!Double.TryParse(sb.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.GetCultureInfo("ru-RU"), out double tmp))
                 if (!Double.TryParse(sb.ToString(), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.GetCultureInfo("en-US"), out tmp))
                     return Answer.ERRINDATA;
-            dev.Voltage = tmp;
+            switch(needParam)
+            {
+                case Params.VOLTA:
+                    device.Voltage = tmp;
+                    break;
+                case Params.CURRE:
+                    device.Current = tmp;
+                    break;
+                case Params.POWEP:
+                    device.Power = tmp;
+                    break;
+                case Params.FREQU:
+                    device.Frequency = tmp;
+                    break;
+                default:
+                    return Answer.ERROUTDATA;
+            }           
             return Answer.NOERR;
         }
 

@@ -31,6 +31,12 @@ namespace InCore
 
         public double Voltage { get; set; }
 
+        public double Current { get; set; }
+
+        public double Power { get; set; }
+
+        public double Frequency { get; set; }
+
         #endregion
     }
 }
