@@ -29,13 +29,33 @@ namespace InCore
 
         #region Показания
 
-        public double Voltage { get; set; }
+        private double _voltage, _current, _power, _frequency;
 
-        public double Current { get; set; }
+        public event Action ParamChanges;
 
-        public double Power { get; set; }
+        public double Voltage 
+        {
+            get { return _voltage; }
+            set { _voltage = value; ParamChanges?.Invoke(); }
+        }
 
-        public double Frequency { get; set; }
+        public double Current
+        {
+            get { return _current; }
+            set { _current = value; ParamChanges?.Invoke(); }
+        }
+
+        public double Power
+        {
+            get { return _power; }
+            set { _power = value; ParamChanges?.Invoke(); }
+        }
+
+        public double Frequency
+        {
+            get { return _frequency; }
+            set { _frequency = value; ParamChanges?.Invoke(); }
+        }
 
         #endregion
     }

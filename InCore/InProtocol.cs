@@ -78,6 +78,18 @@ namespace InCore
             return outCommand.ToArray();
         }
 
+        public byte[] GetReadEnergyCommand()
+        {
+            List<byte> outCommand = new List<byte>();
+            outCommand.Add((byte)ComBytes.SOH);
+            outCommand.AddRange(Encoding.Default.GetBytes("R1")); // R - команда чтения, 1 - данные в формате ASCII
+            outCommand.Add((byte)ComBytes.STX);
+            outCommand.AddRange(Encoding.Default.GetBytes($"EAMPE(01.20,01)"));
+            outCommand.Add((byte)ComBytes.ETX);
+            outCommand.Add(BccCalc(outCommand.ToArray()));
+            return outCommand.ToArray();
+        }
+
         #endregion
 
         #region Разбор ответа счётчика
@@ -117,7 +129,7 @@ namespace InCore
             return Answer.NOERR;
         }
 
-        public Answer CheckParamCommand (byte[] Data, Device device, Params needParam)
+        public Answer CheckParamAnswer (byte[] Data, Device device, Params needParam)
         {
             if (!CheckBcc(Data))
                 return Answer.BADBCC;
@@ -154,6 +166,23 @@ namespace InCore
             return Answer.NOERR;
         }
 
+        public Answer CheckEnergyAnswer(byte[] Data, Device device)
+        {
+            if (!CheckBcc(Data))
+                return Answer.BADBCC;
+            String inDataStr = Encoding.Default.GetString(Data);
+            if (!inDataStr.Contains("EAMPE") || !inDataStr.Contains("(") || !inDataStr.Contains(")"))
+                return Answer.ERRINDATA;
+            int s = inDataStr.IndexOf("(") + 1;
+            StringBuilder sb = new StringBuilder();
+            while (inDataStr[s] != ')')
+            {
+                sb.Append(inDataStr[s]);
+                s++;
+            }
+            return Answer.NOERR;
+        }
+
         #endregion
 
         #region Вспомогательные функции
@@ -174,6 +203,8 @@ namespace InCore
         ///</summary>
         private bool CheckBcc(byte[] Data)
         {
+            if (Data.Length == 0)
+                return false;
             byte[] tmp = new byte[Data.Length - 1];
             Array.Copy(Data, 0, tmp, 0, tmp.Length);
             return BccCalc(tmp) == Data[Data.Length - 1];

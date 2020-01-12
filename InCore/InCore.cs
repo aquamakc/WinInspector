@@ -14,12 +14,5 @@ namespace InCore
                 Password = "777777"
             };
         }
-
-        public bool DoAny()
-        {
-             
-
-            return true;
-        }
     }
 }

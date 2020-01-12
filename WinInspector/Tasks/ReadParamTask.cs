@@ -17,7 +17,7 @@ namespace WinInspector.Tasks
         {
             byte[] OutCom = GetHandler().GetReadParamCommand(Parameter);
             SendData(OutCom);
-            return GetHandler().CheckParamCommand(InData.ToArray(), Device, Parameter);
+            return GetHandler().CheckParamAnswer(InData.ToArray(), Device, Parameter);
         }
     }
 }

@@ -54,8 +54,10 @@ namespace WinInspector.Tasks
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
+        {            
             Timer.Stop();
+            if (InData == null)
+                return;
             int BTR = Port.BytesToRead;
             byte[] buf = new byte[BTR];
             Port.Read(buf, 0, BTR);
@@ -94,6 +96,7 @@ namespace WinInspector.Tasks
                 {
                     Timer?.Dispose();
                     ARE?.Dispose();
+                    InTask?.Dispose();
                     InData = null;
                     Port.DataReceived -= Port_DataReceived;
                 }
