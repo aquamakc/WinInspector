@@ -8,36 +8,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using InCore;
 
 namespace WinInspector.Forms
 {
     public partial class ComCofigForm : Form
     {
-        SerialPort sp = null;
+        PortConfig PortConfig = null;
 
-        public ComCofigForm(SerialPort sp)
+        public ComCofigForm(PortConfig portConfig)
         {
             InitializeComponent();
-            this.sp = sp;
+            this.PortConfig = portConfig;
             cb_portName.Items.AddRange(SerialPort.GetPortNames());
-            cb_portName.SelectedItem = sp.PortName;
+            cb_portName.SelectedItem = portConfig.ComName;
             cb_baudRates.Items.AddRange(new string[] { "9600", "19200" });
-            cb_baudRates.SelectedItem = sp.BaudRate.ToString();
+            cb_baudRates.SelectedItem = portConfig.BaudRate.ToString();
             cb_dataBits.Items.AddRange(new string[] { "5", "6", "7", "8" });
-            cb_dataBits.SelectedItem = sp.DataBits.ToString();
+            cb_dataBits.SelectedItem = portConfig.DataBits.ToString();
             cb_parity.Items.AddRange(Enum.GetNames(typeof(Parity)));
-            cb_parity.SelectedItem = sp.Parity.ToString();
+            cb_parity.SelectedItem = Enum.GetName(typeof(Parity), portConfig.Parity).ToString();
             cb_stopBits.Items.AddRange(Enum.GetNames(typeof(StopBits)));
-            cb_stopBits.SelectedItem = sp.StopBits.ToString();
+            cb_stopBits.SelectedItem = Enum.GetName(typeof(StopBits), portConfig.StopBits).ToString();
         }
 
         private void b_ok_Click(object sender, EventArgs e)
         {
-            sp.PortName = cb_portName.SelectedItem.ToString();
-            sp.BaudRate = int.Parse(cb_baudRates.SelectedItem.ToString());
-            sp.DataBits = int.Parse(cb_dataBits.SelectedItem.ToString());
-            sp.Parity = (Parity)Enum.Parse(typeof(Parity), cb_parity.SelectedItem.ToString());
-            sp.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cb_stopBits.SelectedItem.ToString());
+            PortConfig.ComName = cb_portName.SelectedItem.ToString();
+            PortConfig.BaudRate = int.Parse(cb_baudRates.SelectedItem.ToString());
+            PortConfig.DataBits = int.Parse(cb_dataBits.SelectedItem.ToString());
+            PortConfig.Parity = (int)Enum.Parse(typeof(Parity), cb_parity.SelectedItem.ToString());
+            PortConfig.StopBits = (int)Enum.Parse(typeof(StopBits), cb_stopBits.SelectedItem.ToString());
             this.DialogResult = DialogResult.OK;
         }
 

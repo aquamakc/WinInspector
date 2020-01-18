@@ -5,12 +5,14 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinInspector", "WinInspector\WinInspector.csproj", "{F0AF9DD7-8F38-4B10-970F-B44D8FB7451F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InCore", "InCore\InCore.csproj", "{5D0A3397-A833-4C62-904B-1B0EEA121346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InCore", "InCore\InCore.csproj", "{5D0A3397-A833-4C62-904B-1B0EEA121346}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4047B9BF-50D3-4155-B107-61922333583A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConInspector", "ConInspector\ConInspector.csproj", "{D9BD88FB-4F17-4287-AC98-A0EB03DE8238}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{5D0A3397-A833-4C62-904B-1B0EEA121346}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D0A3397-A833-4C62-904B-1B0EEA121346}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D0A3397-A833-4C62-904B-1B0EEA121346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9BD88FB-4F17-4287-AC98-A0EB03DE8238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9BD88FB-4F17-4287-AC98-A0EB03DE8238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9BD88FB-4F17-4287-AC98-A0EB03DE8238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9BD88FB-4F17-4287-AC98-A0EB03DE8238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

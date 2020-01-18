@@ -17,12 +17,18 @@ namespace WinInspector.Forms
         Worker worker = null;
         Device Device = null;
 
-        public MainForm(Worker worker, InCore.Device Device)
+        public MainForm(Worker worker, Device Device)
         {
             InitializeComponent();
             this.worker = worker;
             this.Device = Device;
             lPortName.Text = worker.PortName;
+            Device.ParamChanges += Device_ParamChanges;
+        }
+
+        private void Device_ParamChanges()
+        {
+            UpdateData();
         }
 
         public void UpdateData()
@@ -51,7 +57,7 @@ namespace WinInspector.Forms
             bPortOpen.Enabled = !isOpen;
             bPortClose.Enabled = isOpen;
             bReadParams.Enabled = isOpen;
-            worker.Init();
+            worker.BeginReadParams();
         }
 
         private void bPortClose_Click(object sender, EventArgs e)
@@ -71,7 +77,7 @@ namespace WinInspector.Forms
 
         private void bReadParams_Click(object sender, EventArgs e)
         {
-            worker.ReadAllParams();
+            worker.BeginReadParams();
         }
     }
 }
