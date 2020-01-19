@@ -9,7 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telegram.Bot;
+using Telegram.Bot.Args;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using InCore;
+using System.Net;
 
 namespace WinInspector.Forms
 {
@@ -17,6 +22,9 @@ namespace WinInspector.Forms
     {
         Worker worker = null;
         Device Device = null;
+        TelegramBotClient client;
+        ChatId Id = null;
+        WebProxy wp = null;
 
         public MainForm(Worker worker, Device Device)
         {
@@ -25,6 +33,27 @@ namespace WinInspector.Forms
             this.Device = Device;
             lPortName.Text = worker.PortName;
             Device.ChangePropertyEvent += Device_ChangePropertyEvent;
+            RunBot();
+        }
+
+        private void RunBot()
+        {
+            wp = new WebProxy("185.204.116.171:3128", true);
+            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo", wp);
+
+            client.OnMessage += BotOnMessageReceived;
+            client.OnMessageEdited += BotOnMessageReceived;
+            client.StartReceiving();
+        }
+
+        private void BotOnMessageReceived(object sender, MessageEventArgs e)
+        {
+            var message = e.Message;
+            Id = message.Chat.Id;
+            if (message?.Type == MessageType.Text)
+            {
+                client.SendTextMessageAsync(Id, message.Text);
+            }
         }
 
         private void Device_ChangePropertyEvent(Device.DevProperties property, double value)
@@ -101,6 +130,18 @@ namespace WinInspector.Forms
         private void bReadParams_Click(object sender, EventArgs e)
         {
             worker.BeginReadParams();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            aaa();
+        }
+
+        void aaa()
+        {
+            var x = client.GetMeAsync();
+            var xxx = x.Result;
+            int i = 0;
         }
     }
 }

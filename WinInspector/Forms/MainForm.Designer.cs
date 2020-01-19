@@ -29,22 +29,23 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.bPortConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.bPortOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.bPortClose = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.bDevConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.bReadParams = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.lPortName = new System.Windows.Forms.ToolStripLabel();
             this.lPortStat = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.l_readedTime = new System.Windows.Forms.ToolStripLabel();
-            this.bDevConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.l_voltaage = new System.Windows.Forms.Label();
             this.l_current = new System.Windows.Forms.Label();
             this.l_power = new System.Windows.Forms.Label();
             this.l_frequency = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +61,62 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bPortConfig,
+            this.bPortOpen,
+            this.bPortClose});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
+            this.toolStripMenuItem1.Text = "Порт";
+            // 
+            // bPortConfig
+            // 
+            this.bPortConfig.Name = "bPortConfig";
+            this.bPortConfig.Size = new System.Drawing.Size(133, 22);
+            this.bPortConfig.Text = "Настройка";
+            this.bPortConfig.Click += new System.EventHandler(this.bPortConfig_Click);
+            // 
+            // bPortOpen
+            // 
+            this.bPortOpen.Name = "bPortOpen";
+            this.bPortOpen.Size = new System.Drawing.Size(133, 22);
+            this.bPortOpen.Text = "Открыть";
+            this.bPortOpen.Click += new System.EventHandler(this.bPortOpen_Click);
+            // 
+            // bPortClose
+            // 
+            this.bPortClose.Enabled = false;
+            this.bPortClose.Name = "bPortClose";
+            this.bPortClose.Size = new System.Drawing.Size(133, 22);
+            this.bPortClose.Text = "Закрыть";
+            this.bPortClose.Click += new System.EventHandler(this.bPortClose_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bDevConfig,
+            this.bReadParams});
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(82, 20);
+            this.toolStripMenuItem2.Text = "Устройство";
+            // 
+            // bDevConfig
+            // 
+            this.bDevConfig.Enabled = false;
+            this.bDevConfig.Name = "bDevConfig";
+            this.bDevConfig.Size = new System.Drawing.Size(176, 22);
+            this.bDevConfig.Text = "Настройки";
+            // 
+            // bReadParams
+            // 
+            this.bReadParams.Enabled = false;
+            this.bReadParams.Name = "bReadParams";
+            this.bReadParams.Size = new System.Drawing.Size(176, 22);
+            this.bReadParams.Text = "Читать параметры";
+            this.bReadParams.Click += new System.EventHandler(this.bReadParams_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -74,55 +131,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bPortConfig,
-            this.bPortOpen,
-            this.bPortClose});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
-            this.toolStripMenuItem1.Text = "Порт";
-            // 
-            // bPortConfig
-            // 
-            this.bPortConfig.Name = "bPortConfig";
-            this.bPortConfig.Size = new System.Drawing.Size(180, 22);
-            this.bPortConfig.Text = "Настройка";
-            this.bPortConfig.Click += new System.EventHandler(this.bPortConfig_Click);
-            // 
-            // bPortOpen
-            // 
-            this.bPortOpen.Name = "bPortOpen";
-            this.bPortOpen.Size = new System.Drawing.Size(180, 22);
-            this.bPortOpen.Text = "Открыть";
-            this.bPortOpen.Click += new System.EventHandler(this.bPortOpen_Click);
-            // 
-            // bPortClose
-            // 
-            this.bPortClose.Enabled = false;
-            this.bPortClose.Name = "bPortClose";
-            this.bPortClose.Size = new System.Drawing.Size(180, 22);
-            this.bPortClose.Text = "Закрыть";
-            this.bPortClose.Click += new System.EventHandler(this.bPortClose_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bDevConfig,
-            this.bReadParams});
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(82, 20);
-            this.toolStripMenuItem2.Text = "Устройство";
-            // 
-            // bReadParams
-            // 
-            this.bReadParams.Enabled = false;
-            this.bReadParams.Name = "bReadParams";
-            this.bReadParams.Size = new System.Drawing.Size(180, 22);
-            this.bReadParams.Text = "Читать параметры";
-            this.bReadParams.Click += new System.EventHandler(this.bReadParams_Click);
             // 
             // lPortName
             // 
@@ -146,13 +154,6 @@
             this.l_readedTime.Name = "l_readedTime";
             this.l_readedTime.Size = new System.Drawing.Size(110, 22);
             this.l_readedTime.Text = "01/01/1960 01:01:01";
-            // 
-            // bDevConfig
-            // 
-            this.bDevConfig.Enabled = false;
-            this.bDevConfig.Name = "bDevConfig";
-            this.bDevConfig.Size = new System.Drawing.Size(180, 22);
-            this.bDevConfig.Text = "Настройки";
             // 
             // l_voltaage
             // 
@@ -190,11 +191,22 @@
             this.l_frequency.TabIndex = 5;
             this.l_frequency.Text = "label4";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(312, 129);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.l_frequency);
             this.Controls.Add(this.l_power);
             this.Controls.Add(this.l_current);
@@ -235,6 +247,7 @@
         private System.Windows.Forms.Label l_current;
         private System.Windows.Forms.Label l_power;
         private System.Windows.Forms.Label l_frequency;
+        private System.Windows.Forms.Button button1;
     }
 }
 

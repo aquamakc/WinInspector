@@ -78,13 +78,8 @@ namespace InCore
             {
                 if (!File.Exists(ConfigFile))
                     return;
-                String SavingCfg = File.ReadAllText(ConfigFile);
-                PortConfig config = JsonConvert.DeserializeObject<PortConfig>(SavingCfg);
-                sp.PortName = config.ComName;
-                sp.BaudRate = config.BaudRate;
-                sp.DataBits = config.DataBits;
-                sp.Parity = (Parity)config.Parity;
-                sp.StopBits = (StopBits)config.StopBits;
+                string SavingCfg = File.ReadAllText(ConfigFile);
+                PortConfig = JsonConvert.DeserializeObject<PortConfig>(SavingCfg);
             }
             catch (Exception)
             {
