@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,12 +24,34 @@ namespace WinInspector.Forms
             this.worker = worker;
             this.Device = Device;
             lPortName.Text = worker.PortName;
-            Device.ParamChanges += Device_ParamChanges;
+            Device.ChangePropertyEvent += Device_ChangePropertyEvent;
         }
 
-        private void Device_ParamChanges()
+        private void Device_ChangePropertyEvent(Device.DevProperties property, double value)
         {
-            UpdateData();
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Device.ChangePropertyDelegate(Device_ChangePropertyEvent), new object[] { property, value });
+                return;
+            }
+            switch(property)
+            {
+                case Device.DevProperties.Voltage:
+                    l_voltaage.Text = value.ToString();
+                    break;
+                case Device.DevProperties.Current:
+                    l_current.Text = value.ToString();
+                    break;
+                case Device.DevProperties.Power:
+                    l_power.Text = value.ToString();
+                    break;
+                case Device.DevProperties.Frequency:
+                    l_frequency.Text = value.ToString();
+                    break;
+                default:
+                    break;
+            }
+            l_readedTime.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
         }
 
         public void UpdateData()

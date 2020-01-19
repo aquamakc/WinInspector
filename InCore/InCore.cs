@@ -23,12 +23,6 @@ namespace InCore
                 Password = "777777"
             };
             LoadConfig();
-            device.ParamChanges += Device_ParamChanges;
-        }
-
-        private void Device_ParamChanges()
-        {
-            //throw new NotImplementedException();
         }
 
         #region ComPort

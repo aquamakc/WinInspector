@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Linq;
 using InCore;
 
 namespace ConInspector
@@ -11,20 +13,18 @@ namespace ConInspector
         {
             core = new InCore.InCore();
             device = core.device;
-            device.ParamChanges += Device_ParamChanges;
+            device.ChangePropertyEvent += Device_ChangePropertyEvent;
             ShowPorts();
             core.OpenPort();
             core.Init();
+            Console.WriteLine();
             Console.ReadKey();
             core.ClosePort();
         }
 
-        private static void Device_ParamChanges()
+        private static void Device_ChangePropertyEvent(Device.DevProperties property, double value)
         {
-            Console.WriteLine($"Напряжение: {device.Voltage.ToString()}");
-            Console.WriteLine($"Ток: {device.Current.ToString()}");
-            Console.WriteLine($"Потребляемая мощность: {device.Power.ToString()}");
-            Console.WriteLine($"Частота тока: {device.Frequency.ToString()}");
+            Console.WriteLine($"{property.ToString()} : {value.ToString()}");
         }
 
         private static void ShowPorts()

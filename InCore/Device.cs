@@ -6,6 +6,12 @@ namespace InCore
 {
     public class Device
     {
+        static readonly double Epsylon = Math.Pow(2, -53);
+
+        public delegate void ChangePropertyDelegate(DevProperties property, double value);
+        public event ChangePropertyDelegate ChangePropertyEvent;
+        public enum DevProperties : byte {Voltage, Current, Power, Frequency }
+
         #region Статичные свойства
 
         /// <summary>
@@ -31,30 +37,52 @@ namespace InCore
 
         private double _voltage, _current, _power, _frequency;
 
-        public event Action ParamChanges;
-
         public double Voltage 
         {
             get { return _voltage; }
-            set { _voltage = value; ParamChanges?.Invoke(); }
+            set 
+            {
+                if (Math.Abs(_voltage - value) <= Epsylon)
+                    return;
+                _voltage = value;
+                ChangePropertyEvent?.Invoke(DevProperties.Voltage, value);
+            }
         }
 
         public double Current
         {
             get { return _current; }
-            set { _current = value; ParamChanges?.Invoke(); }
+            set
+            {
+                if (Math.Abs(_current - value) <= Epsylon)
+                    return;
+                _current = value;
+                ChangePropertyEvent?.Invoke(DevProperties.Current, value);
+            }
         }
 
         public double Power
         {
             get { return _power; }
-            set { _power = value; ParamChanges?.Invoke(); }
+            set
+            {
+                if (Math.Abs(_power - value) <= Epsylon)
+                    return;
+                _power = value;
+                ChangePropertyEvent?.Invoke(DevProperties.Power, value);
+            }
         }
 
         public double Frequency
         {
             get { return _frequency; }
-            set { _frequency = value; ParamChanges?.Invoke(); }
+            set
+            {
+                if (Math.Abs(_frequency - value) <= Epsylon)
+                    return;
+                _frequency = value;
+                ChangePropertyEvent?.Invoke(DevProperties.Frequency, value);
+            }
         }
 
         #endregion
