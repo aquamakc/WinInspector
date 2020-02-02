@@ -28,7 +28,7 @@ namespace InCore
         #region ComPort
 
         public string[] PortsEnabled { get { return SerialPort.GetPortNames(); } }
-        public string PortName { get { return sp.PortName; } }
+        public string PortName { get { return sp.PortName; } set { sp.PortName = value; } }
         public bool IsPortOpen { get { return sp.IsOpen; } }
         public bool OpenPort()
         {
