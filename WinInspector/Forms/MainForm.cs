@@ -50,7 +50,7 @@ namespace WinInspector.Forms
         {
             var message = e.Message;
             Id = message.Chat.Id;
-            if (message?.Type == MessageType.Text)
+            if (message.Type == MessageType.Text)
             {
                 client.SendTextMessageAsync(Id, message.Text);
             }
@@ -141,7 +141,6 @@ namespace WinInspector.Forms
         {
             var x = client.GetMeAsync();
             var xxx = x.Result;
-            int i = 0;
         }
     }
 }

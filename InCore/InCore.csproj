@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net451</TargetFrameworks>
-    <RuntimeIdentifiers>win10-x64;linux-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win10-x64;linux-x64;linux-arm</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">

@@ -17,19 +17,21 @@ namespace ConInspector
         private static TelegramBotClient client;
         private static ChatId Id = null;
         private static WebProxy wp = null;
+        private const string proxyIp = "136.243.47.220";
+        private const int proxyPort = 3128;
+
         static void Main(string[] args)
         {
             core = new InCore.InCore();
             device = core.device;
             RunBot();
-
             device.ChangePropertyEvent += Device_ChangePropertyEvent;
             ShowPorts();
             core.OpenPort();
-            core.Init();          
+            core.Init();
             Console.ReadKey();
             client.StopReceiving();
-            core.ClosePort();
+            core.ClosePort();           
         }
 
         private static void Device_ChangePropertyEvent(Device.DevProperties property, double value)
@@ -37,7 +39,7 @@ namespace ConInspector
             Console.WriteLine($"{property.ToString()} : {value.ToString()}");
             if (Id == null)
                 return;
-            client.SendTextMessageAsync(Id, $"{property.ToString()} : {value.ToString()}");
+            var res = client.SendTextMessageAsync(Id, $"{property.ToString()} : {value.ToString()}").GetAwaiter().GetResult();
         }
 
         private static void ShowPorts()
@@ -50,13 +52,17 @@ namespace ConInspector
             var ch = Console.ReadKey().KeyChar;
             Console.WriteLine("");
             int num = int.Parse(ch.ToString());
-            core.PortConfig.ComName = ports[num];
+            var config = core.PortConfig;
+            config.ComName = ports[num];
+            core.PortConfig = config;
+            core.SaveConfig();
         }
 
         #region Telegram.Bot
         private static void RunBot()
         {
-            wp = new WebProxy("185.204.116.171:3128", true);
+            wp = new WebProxy($"{proxyIp}:{proxyPort.ToString()}", true);
+            //wp.Credentials = new NetworkCredential("ecvumfkl-dest", "bl87hy9rzwia");
             client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo", wp);
             client.OnMessage += BotOnMessageReceived; 
             client.OnMessageEdited += BotOnMessageReceived;           
@@ -67,9 +73,15 @@ namespace ConInspector
         {
             var message = e.Message;
             Id = message.Chat.Id;
-            if (message?.Type == MessageType.Text)
+            if (message.Type != MessageType.Text)
+                return;
+            if(message.Text == "R")
             {
                 client.SendTextMessageAsync(Id, message.Text);
+            }
+            if (message.Text == "C")
+            {
+                core.Init();
             }
         }
 

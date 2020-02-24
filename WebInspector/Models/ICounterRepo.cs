@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebInspector.Models
 {
-    interface ICounterRepo
+    public interface ICounterRepo
     {
         IQueryable<CounterModels> CounterData { get; }
     }

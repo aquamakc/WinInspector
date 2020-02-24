@@ -1,0 +1,10 @@
+﻿@model IEnumerable<CounterModels>
+
+@foreach (var c in Model)
+{
+    <div>
+        <h3>@c.Descriptions</h3>
+        @c.index<br />
+        @c.Current.ToString()
+    </div>
+}
