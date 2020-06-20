@@ -19,9 +19,6 @@ namespace ConDaemon
         static InCore.InCore core = null;
         private static TelegramBotClient client;
         private static ChatId Id = null;
-        private static WebProxy wp = null;
-        private const string proxyIp = "136.243.47.220";
-        private const int proxyPort = 3128;
 
         public static async Task Main(string[] args)
         {
@@ -50,6 +47,7 @@ namespace ConDaemon
             RunBot();
             core = new InCore.InCore();
             device = core.device;
+            device.IsEconomyTraffic = false;
             device.ChangePropertyEvent += Device_ChangePropertyEvent;
             core.OpenPort();
             await host.RunConsoleAsync();
@@ -58,8 +56,7 @@ namespace ConDaemon
         #region Telegram.Bot
         private static void RunBot()
         {
-            wp = new WebProxy($"{proxyIp}:{proxyPort.ToString()}", true);
-            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo", wp);
+            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo");
             client.OnMessage += BotOnMessageReceived;
             client.OnMessageEdited += BotOnMessageReceived;
             client.StartReceiving();
@@ -85,7 +82,7 @@ namespace ConDaemon
         {
             if (Id == null)
                 return;
-            var res = client.SendTextMessageAsync(Id, $"{property.ToString()} : {value.ToString()}").GetAwaiter().GetResult();
+            var res = client.SendTextMessageAsync(Id, $"{property} : {value}").GetAwaiter().GetResult();
         }
 
         #endregion

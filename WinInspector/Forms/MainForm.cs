@@ -38,7 +38,7 @@ namespace WinInspector.Forms
 
         private void RunBot()
         {
-            wp = new WebProxy("185.204.116.171:3128", true);
+            wp = new WebProxy("136.243.47.220:3128", true);
             client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo", wp);
 
             client.OnMessage += BotOnMessageReceived;
@@ -141,6 +141,7 @@ namespace WinInspector.Forms
         {
             var x = client.GetMeAsync();
             var xxx = x.Result;
+            int a = 000;
         }
     }
 }

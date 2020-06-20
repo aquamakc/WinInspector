@@ -31,6 +31,8 @@ namespace InCore
 
         public String Name { get; set; }
 
+        public bool IsEconomyTraffic { get; set; } = true;
+
         #endregion
 
         #region Показания
@@ -42,7 +44,7 @@ namespace InCore
             get { return _voltage; }
             set 
             {
-                if (Math.Abs(_voltage - value) <= Epsylon)
+                if (Math.Abs(_voltage - value) <= Epsylon && IsEconomyTraffic)
                     return;
                 _voltage = value;
                 ChangePropertyEvent?.Invoke(DevProperties.Voltage, value);
@@ -54,7 +56,7 @@ namespace InCore
             get { return _current; }
             set
             {
-                if (Math.Abs(_current - value) <= Epsylon)
+                if (Math.Abs(_current - value) <= Epsylon && IsEconomyTraffic)
                     return;
                 _current = value;
                 ChangePropertyEvent?.Invoke(DevProperties.Current, value);
@@ -66,7 +68,7 @@ namespace InCore
             get { return _power; }
             set
             {
-                if (Math.Abs(_power - value) <= Epsylon)
+                if (Math.Abs(_power - value) <= Epsylon && IsEconomyTraffic)
                     return;
                 _power = value;
                 ChangePropertyEvent?.Invoke(DevProperties.Power, value);
@@ -78,7 +80,7 @@ namespace InCore
             get { return _frequency; }
             set
             {
-                if (Math.Abs(_frequency - value) <= Epsylon)
+                if (Math.Abs(_frequency - value) <= Epsylon && IsEconomyTraffic)
                     return;
                 _frequency = value;
                 ChangePropertyEvent?.Invoke(DevProperties.Frequency, value);

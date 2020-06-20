@@ -63,7 +63,7 @@ namespace ConInspector
         {
             wp = new WebProxy($"{proxyIp}:{proxyPort.ToString()}", true);
             //wp.Credentials = new NetworkCredential("ecvumfkl-dest", "bl87hy9rzwia");
-            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo", wp);
+            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo");
             client.OnMessage += BotOnMessageReceived; 
             client.OnMessageEdited += BotOnMessageReceived;           
             client.StartReceiving();          
