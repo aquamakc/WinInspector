@@ -1,7 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using InLogger;
+using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using WinInspector.Tasks;
 using static InCore.InProtocol;
 
@@ -10,7 +14,7 @@ namespace InCore
     public class InCore
     {
         public Device device;
-        SerialPort sp = null;
+        readonly SerialPort sp = null;
 
         private readonly string ConfigFile = Path.Combine(Environment.CurrentDirectory, "config.json");
 
@@ -91,7 +95,7 @@ namespace InCore
         {
             try
             {
-                String SavingCfg = JsonConvert.SerializeObject(PortConfig);
+                string SavingCfg = JsonConvert.SerializeObject(PortConfig);
                 File.WriteAllText(ConfigFile, SavingCfg);
             }
             catch (Exception)

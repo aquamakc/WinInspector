@@ -45,7 +45,6 @@
             this.l_current = new System.Windows.Forms.Label();
             this.l_power = new System.Windows.Forms.Label();
             this.l_frequency = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,14 +75,14 @@
             this.bPortConfig.Name = "bPortConfig";
             this.bPortConfig.Size = new System.Drawing.Size(133, 22);
             this.bPortConfig.Text = "Настройка";
-            this.bPortConfig.Click += new System.EventHandler(this.bPortConfig_Click);
+            this.bPortConfig.Click += new System.EventHandler(this.BPortConfig_Click);
             // 
             // bPortOpen
             // 
             this.bPortOpen.Name = "bPortOpen";
             this.bPortOpen.Size = new System.Drawing.Size(133, 22);
             this.bPortOpen.Text = "Открыть";
-            this.bPortOpen.Click += new System.EventHandler(this.bPortOpen_Click);
+            this.bPortOpen.Click += new System.EventHandler(this.BPortOpen_Click);
             // 
             // bPortClose
             // 
@@ -91,7 +90,7 @@
             this.bPortClose.Name = "bPortClose";
             this.bPortClose.Size = new System.Drawing.Size(133, 22);
             this.bPortClose.Text = "Закрыть";
-            this.bPortClose.Click += new System.EventHandler(this.bPortClose_Click);
+            this.bPortClose.Click += new System.EventHandler(this.BPortClose_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -115,7 +114,7 @@
             this.bReadParams.Name = "bReadParams";
             this.bReadParams.Size = new System.Drawing.Size(176, 22);
             this.bReadParams.Text = "Читать параметры";
-            this.bReadParams.Click += new System.EventHandler(this.bReadParams_Click);
+            this.bReadParams.Click += new System.EventHandler(this.BReadParams_Click);
             // 
             // toolStrip1
             // 
@@ -191,22 +190,11 @@
             this.l_frequency.TabIndex = 5;
             this.l_frequency.Text = "label4";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(312, 129);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.l_frequency);
             this.Controls.Add(this.l_power);
             this.Controls.Add(this.l_current);
@@ -247,7 +235,6 @@
         private System.Windows.Forms.Label l_current;
         private System.Windows.Forms.Label l_power;
         private System.Windows.Forms.Label l_frequency;
-        private System.Windows.Forms.Button button1;
     }
 }
 

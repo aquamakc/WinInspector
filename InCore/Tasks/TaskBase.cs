@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using InCore;
 using static InCore.InProtocol;
 using System.Threading;
+using System.Diagnostics;
+using InLogger;
 
 namespace WinInspector.Tasks
 {
@@ -14,8 +14,8 @@ namespace WinInspector.Tasks
     {
         public TaskBase(Device device, SerialPort port)
         {
-            this.Device = device;
-            this.Port = port;
+            Device = device;
+            Port = port;
             port.DataReceived += Port_DataReceived;
             Timer = new System.Timers.Timer();
             Timer.Elapsed += Timer_Elapsed;
@@ -24,9 +24,9 @@ namespace WinInspector.Tasks
 
         public TaskBase(Device device, SerialPort port, Params needParam)
         {
-            this.Device = device;
-            this.Port = port;
-            this.Parameter = needParam;
+            Device = device;
+            Port = port;
+            Parameter = needParam;
             port.DataReceived += Port_DataReceived;
             Timer = new System.Timers.Timer();
             Timer.Elapsed += Timer_Elapsed;
@@ -45,7 +45,7 @@ namespace WinInspector.Tasks
 
         private AutoResetEvent ARE { get; set; } = null;      
 
-        private System.Timers.Timer Timer { get; set; } = null;    
+        private System.Timers.Timer Timer { get; set; } = null;
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -54,10 +54,10 @@ namespace WinInspector.Tasks
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {            
-            Timer.Stop();
+        {
             if (InData == null)
                 return;
+            Timer.Stop();
             int BTR = Port.BytesToRead;
             byte[] buf = new byte[BTR];
             Port.Read(buf, 0, BTR);
@@ -67,11 +67,8 @@ namespace WinInspector.Tasks
         }
 
         public Answer Execute()
-        {
-            InTask = new Task<Answer>(DoingMethod);
-            InTask.Start();
-            Answer answer = InTask.Result;           
-            return answer;
+        {         
+            return DoingMethod();
         }
 
         public void SendData(byte[] data)

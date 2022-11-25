@@ -10,6 +10,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using InCore;
 using System.Net;
+using System.Threading;
 
 namespace ConDaemon
 {
@@ -17,8 +18,10 @@ namespace ConDaemon
     {
         static Device device = null;
         static InCore.InCore core = null;
+
         private static TelegramBotClient client;
-        private static ChatId Id = null;
+        readonly static CancellationTokenSource cts = new CancellationTokenSource();
+        private static ChatId chatId = null;
 
         public static async Task Main(string[] args)
         {
@@ -47,6 +50,7 @@ namespace ConDaemon
             RunBot();
             core = new InCore.InCore();
             device = core.device;
+            core.PortConfig.ComName = "ttyS0";
             device.IsEconomyTraffic = false;
             device.ChangePropertyEvent += Device_ChangePropertyEvent;
             core.OpenPort();
@@ -57,32 +61,50 @@ namespace ConDaemon
         private static void RunBot()
         {
             client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo");
-            client.OnMessage += BotOnMessageReceived;
-            client.OnMessageEdited += BotOnMessageReceived;
-            client.StartReceiving();
+            client.StartReceiving(updateHandler: HandleUpdateAsync,
+            pollingErrorHandler: HandlePollingErrorAsync,
+            cancellationToken: cts.Token);
         }
 
-        private static void BotOnMessageReceived(object sender, MessageEventArgs e)
+        static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var message = e.Message;
-            Id = message.Chat.Id;
-            if (message.Type != MessageType.Text)
-                return;
-            if (message.Text == "R")
+            var message = update.Message;
+            chatId = message.Chat.Id;
+            switch (message.Text.Trim().ToUpper())
             {
-                client.SendTextMessageAsync(Id, message.Text);
+                case "C":
+                    core.Init();
+                    break;
+                case "R":
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Report",
+                        cancellationToken: cancellationToken);
+                    break;
+                default:
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "No command",
+                        cancellationToken: cancellationToken);
+                    break;
             }
-            if (message.Text == "C")
-            {
-                core.Init();
-            }
+        }
+
+        static Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            cts.Cancel();
+            return Task.CompletedTask;
         }
 
         private static void Device_ChangePropertyEvent(Device.DevProperties property, double value)
         {
-            if (Id == null)
+            if (chatId == null)
                 return;
-            var res = client.SendTextMessageAsync(Id, $"{property} : {value}").GetAwaiter().GetResult();
+            string answer = $"{property} {value}";
+            client?.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: answer,
+                        cancellationToken: cts.Token);
         }
 
         #endregion

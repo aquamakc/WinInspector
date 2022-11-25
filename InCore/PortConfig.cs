@@ -18,11 +18,11 @@ namespace InCore
         {
             return new PortConfig()
             {
-                ComName = (string)this.ComName.Clone(),
-                BaudRate = this.BaudRate,
-                DataBits = this.DataBits,
-                Parity = this.Parity,
-                StopBits = this.StopBits
+                ComName = (string)ComName.Clone(),
+                BaudRate = BaudRate,
+                DataBits = DataBits,
+                Parity = Parity,
+                StopBits = StopBits
             };
         }
     }
