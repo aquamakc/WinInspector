@@ -50,7 +50,7 @@ namespace ConDaemon
             RunBot();
             core = new InCore.InCore();
             device = core.device;
-            core.PortConfig.ComName = "ttyS0";
+            core.PortConfig.ComName = "ttyUSB0";
             device.IsEconomyTraffic = false;
             device.ChangePropertyEvent += Device_ChangePropertyEvent;
             core.OpenPort();

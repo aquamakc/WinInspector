@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Linq;
-using Telegram.Bot;
-using Telegram.Bot.Args;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using InCore;
 using System.Net;
+using System.Timers;
+using Microsoft.EntityFrameworkCore;
+using ConInspector.DB;
+using System.IO.Ports;
 
 namespace ConInspector
 {
@@ -14,32 +14,56 @@ namespace ConInspector
     {
         static Device device = null;
         static InCore.InCore core = null;
-        private static TelegramBotClient client;
-        private static ChatId Id = null;
-        private static WebProxy wp = null;
-        private const string proxyIp = "136.243.47.220";
-        private const int proxyPort = 3128;
+
+        static Timer timer = null;
+
+        static Context context = null;
 
         static void Main(string[] args)
         {
             core = new InCore.InCore();
             device = core.device;
-            RunBot();
+            device.IsEconomyTraffic = false;
             device.ChangePropertyEvent += Device_ChangePropertyEvent;
+            context = new Context();
             ShowPorts();
             core.OpenPort();
-            core.Init();
+            timer = new Timer(10000)
+            {
+                AutoReset = true
+            };
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
             Console.ReadKey();
-            client.StopReceiving();
             core.ClosePort();           
+        }
+
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            core.Init();
         }
 
         private static void Device_ChangePropertyEvent(Device.DevProperties property, double value)
         {
-            Console.WriteLine($"{property.ToString()} : {value.ToString()}");
-            if (Id == null)
-                return;
-            var res = client.SendTextMessageAsync(Id, $"{property.ToString()} : {value.ToString()}").GetAwaiter().GetResult();
+            Console.WriteLine($"{property}: {value}");
+            switch (property)
+            {
+                case Device.DevProperties.Voltage:
+                    context.Voltages.Add(new DB.DbModels.Voltage() { Value= value, CreatedAt = DateTime.Now });
+                    break;
+                case Device.DevProperties.Current:
+                    context.Currents.Add(new DB.DbModels.Current() { Value = value, CreatedAt = DateTime.Now });
+                    break;
+                case Device.DevProperties.Frequency:
+                    context.Frequencies.Add(new DB.DbModels.Frequency() { Value = value, CreatedAt = DateTime.Now });
+                    break;
+                case Device.DevProperties.Power:
+                    context.Powers.Add(new DB.DbModels.Power() { Value = value, CreatedAt = DateTime.Now });
+                    break;
+                default:
+                    return;
+            }
+            context.SaveChanges();
         }
 
         private static void ShowPorts()
@@ -53,38 +77,12 @@ namespace ConInspector
             Console.WriteLine("");
             int num = int.Parse(ch.ToString());
             var config = core.PortConfig;
+            config.DataBits = 7;
+            config.Parity = (int)Parity.Even;
             config.ComName = ports[num];
             core.PortConfig = config;
             core.SaveConfig();
         }
 
-        #region Telegram.Bot
-        private static void RunBot()
-        {
-            wp = new WebProxy($"{proxyIp}:{proxyPort.ToString()}", true);
-            //wp.Credentials = new NetworkCredential("ecvumfkl-dest", "bl87hy9rzwia");
-            client = new TelegramBotClient("1005264688:AAEodWIy4O1hWhTJ66u4jtRtmcveQFfodvo");
-            client.OnMessage += BotOnMessageReceived; 
-            client.OnMessageEdited += BotOnMessageReceived;           
-            client.StartReceiving();          
-        }
-
-        private static void BotOnMessageReceived(object sender, MessageEventArgs e)
-        {
-            var message = e.Message;
-            Id = message.Chat.Id;
-            if (message.Type != MessageType.Text)
-                return;
-            if(message.Text == "R")
-            {
-                client.SendTextMessageAsync(Id, message.Text);
-            }
-            if (message.Text == "C")
-            {
-                core.Init();
-            }
-        }
-
-        #endregion
     }
 }
